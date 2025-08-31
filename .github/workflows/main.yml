@@ -16,17 +16,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+      # 🔍 Debug: show where we are and what files e
+      - name: Print workspace tree
+        run: |
+          pwd
+          ls -la
+          echo "---- react-app ----"
+          ls -la react-app || true
 
       - name: Install dependencies
-        run: npm ci
+        working-directory: ./react-app
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Type check
+        working-directory: ./react-app
         run: npx tsc --noEmit
 
       - name: Build
+        working-directory: ./react-app
         run: npm run build
+
+      - name: Upload dist artifact
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-app-dist
+          path: react-app/dist
