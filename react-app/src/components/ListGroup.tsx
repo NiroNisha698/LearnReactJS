@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+
 
 interface Props {
     items: string[];
@@ -11,10 +13,23 @@ function ListGroup({items, heading, onSelectItem}: Props) {
 
   //Hook
  const [selectedIndex, setSelectedIndex]= useState(-1);
+ const [counter1, setCounter1]= useState(0);
+
   //function
   const getGreeting = () => {
     return <h1>Hello Good Morning</h1>;
   };
+
+   //useEffect Examples
+  //Type 1: Call useEffect after every render
+//   useEffect(() => {
+//     console.log("Use Effect Executing!!");
+//   })
+
+    //Type 2: Call useEffect only once initially load
+    // useEffect((() => {
+    // console.log("Use Effect Executing once!!");
+    //  }),[])
 
   return (
     <>
@@ -22,6 +37,8 @@ function ListGroup({items, heading, onSelectItem}: Props) {
       {items.length === 0 ? <p> No Records</p> : null}
       <ul className="list-group">
         {getGreeting()}
+
+        <h1>{counter1}</h1>
 
         {items.map((item, index) => (
           <li
@@ -36,6 +53,8 @@ function ListGroup({items, heading, onSelectItem}: Props) {
             {item}
           </li>
         ))}
+
+        <button className="btn btn-primary m-2" onClick={() => setCounter1(counter1 + 1)}>Increment</button>
       </ul>
     </>
   );
